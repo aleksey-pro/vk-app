@@ -1,26 +1,59 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Container, Alert } from 'reactstrap';
+import { login } from './api/actions';
+import Invite from './invite';
+import Profile from './Profile';
+import {
+  getTokenFromLocalStorage,
+  setTokenToLocalStorage,
+} from './api/localStorage';
+
+const API_VERSION = '5.73';
+
+class App extends React.Component {
+  validateToken = () => {
+    const token = getTokenFromLocalStorage();
+    return !!token;
+  };
+
+  state = {
+    isAuthorized: this.validateToken(),
+    errorOccurred: false,
+  };
+
+  handleLogin = () => {
+    login(6262771, 2)
+      .then(response => {
+        const token = response.session.sid;
+        setTokenToLocalStorage(token);
+        this.setState({ isAuthorized: true });
+      })
+      // Здесь я решил перхватить ошибку из reject чтобы отреденерить сообщение
+      .catch(err => this.setState({ errorOccurred: true }));
+  };
+
+  render() {
+    const { isAuthorized, errorOccurred } = this.state;
+    return (
+      <div className="App">
+        <Container>
+          {errorOccurred && (
+            <Alert className="alert-custom" color="danger">
+              Ошибка авторизаци!
+            </Alert>
+          )}
+          {!isAuthorized && <Invite handleAuthButton={this.handleLogin} />}
+          {isAuthorized && <Profile api={API_VERSION} />}
+          <p className="laws">
+            Free Vector Art by{' '}
+            <a href="https://vecteezy.com">www.vecteezy.com</a>
+          </p>
+        </Container>
+      </div>
+    );
+  }
 }
 
 export default App;
