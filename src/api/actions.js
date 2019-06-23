@@ -30,10 +30,11 @@ const callApi = (method, params) => {
   return new Promise(function(resolve, reject) {
     VK.api(method, params, function(response) {
       if (response.error) {
+        console.log(response.error);
         reject(new Error(response.error.error_msg));
       } else {
         resolve(response.response);
-        // console.log(response); // uncomment to debug
+        // console.log(response.response); // uncomment to debug
       }
     });
   });

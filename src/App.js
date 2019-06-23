@@ -5,16 +5,12 @@ import { Container, Alert } from 'reactstrap';
 import { login } from './api/actions';
 import Invite from './invite';
 import Profile from './Profile';
-import {
-  getTokenFromLocalStorage,
-  setTokenToLocalStorage,
-} from './api/localStorage';
 
 const API_VERSION = '5.73';
 
 class App extends React.Component {
   validateToken = () => {
-    const token = getTokenFromLocalStorage();
+    const token = localStorage.getItem('access_token');
     return !!token;
   };
 
@@ -27,8 +23,8 @@ class App extends React.Component {
     login(6262771, 2)
       .then(response => {
         const token = response.session.sid;
-        setTokenToLocalStorage(token);
-        this.setState({ isAuthorized: true });
+        localStorage.setItem('access_token', token);
+        this.setState({ isAuthorized: true, errorOccurred: false });
       })
       // Здесь я решил перхватить ошибку из reject чтобы отреденерить сообщение
       .catch(err => this.setState({ errorOccurred: true }));

@@ -5,24 +5,49 @@ import UserCard from './components/userCard';
 import FriendCard from './components/friendCard';
 
 class Profile extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: {
+  state = {
+    user: {
+      city: {},
+    },
+    friends: [
+      {
         city: {},
       },
-      friends: [
-        {
-          city: {},
-        },
-      ],
-    };
-  }
+    ],
+  };
+
+  checkStorage = data => {
+    return JSON.parse(localStorage.getItem(data));
+  };
 
   componentDidMount() {
     const { api } = this.props;
-    getUser(api).then(user => this.setState({ user: user[0] }));
-    getFriends(api).then(friends => this.setState({ friends: friends.items }));
+    // Проверим - есть ли данные в localStorage
+    const storage = {
+      user: this.checkStorage('userData'),
+      friends: this.checkStorage('friendsData'),
+    };
+
+    // Если нет  - берем их из API и сохраняем в localStorage,
+    // в state помещаем данные из API
+    if (storage.user === null) {
+      getUser(api).then(user => {
+        localStorage.setItem('userData', JSON.stringify(user));
+        this.setState({ user: user[0] });
+      });
+    } else {
+      // Если данные есть в localStorage - помещаем их сразу в state
+      this.setState({ user: storage.user[0] });
+    }
+
+    if (storage.friends === null) {
+      getFriends(api).then(friends => {
+        localStorage.setItem('friendsData', JSON.stringify(friends));
+        this.setState({ friends: friends.items });
+      });
+    } else {
+      this.setState({ friends: storage.friends.items });
+    }
   }
 
   renderFriendCards = () => {
@@ -34,7 +59,6 @@ class Profile extends React.Component {
 
   render() {
     const { user } = this.state;
-    console.log(this.state);
     return (
       <div className="profile-container">
         <Row className="user-container">

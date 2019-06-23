@@ -2,5 +2,4 @@
 
 TODO
 
-localstorage!!!!
-error page render!!!
+https://vk.com/dev/openapi
