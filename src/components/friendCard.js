@@ -7,7 +7,7 @@ export default function FriendCard({ friend }) {
       <Card
         body
         inverse
-        style={{ backgroundColor: '#333', borderColor: '#333' }}
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)', borderColor: '#333' }}
       >
         <CardHeader>{`${friend.first_name} ${friend.last_name}`}</CardHeader>
         <CardImg top width="100%" src={friend.photo_100} alt="My photo" />

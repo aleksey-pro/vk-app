@@ -7,7 +7,7 @@ export default function UserCard({ user }) {
       <Card
         body
         inverse
-        style={{ backgroundColor: '#333', borderColor: '#333' }}
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)', borderColor: '#333' }}
       >
         <CardHeader>{`${user.first_name} ${user.last_name}`}</CardHeader>
         <CardImg top width="100%" src={user.photo_100} alt="My photo" />
