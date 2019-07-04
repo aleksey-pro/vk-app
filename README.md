@@ -11,6 +11,10 @@
 3. react context + reactstrap
 4. create-react-app
 
+## Demo
+
+https://vk-app-98bde.firebaseapp.com/
+
 ## Установка
 
 - npm install
